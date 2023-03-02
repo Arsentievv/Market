@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="conteiner">
+            <form action="{% url 'search_results' %}" method="get">
+                <input name="q" type="text" placeholder="Search...">
+            </form>
+            <div class="cart">
+                <a href="{% url 'cart' %}">
+                    <div class="cart_icon">
+                        <img src="{% static 'icons/cart.svg' %}" alt="" height="40px" width="40px">
+                    </div>
+                </a>
+            </div>
+
+            <div class="account">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'my_account' pk=request.user.id %}">
+                        <div class="profile_icon">
+                            <img src="{% static 'icons/user.svg' %}" alt="" height="40px" width="40px">
+                        </div>
+                    </a>
+                {% else %}
+                    <div class="login">
+                        <a href="{% url 'login' %}">Login</a>
+                        <a href="{% url 'registration' %} ">Registration</a>
+                    </div>
+                {% endif %}
+            </div>
+            <a href="">
+                <div class="telegram_icon">
+                    <img src="{% static 'icons/telegram.svg' %}" alt="" height="40px" width="40px">
+                </div>
+            </a>
+            <a href="">
+                <div class="instagram_icon">
+                    <img src="{% static 'icons/instagram.svg' %}" alt="" height="40px" width="40px">
+                </div>
+            </a>
+        </div>
+        <div class="menu-burger__header">
+            <span></span>
+        </div>
+    </header>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

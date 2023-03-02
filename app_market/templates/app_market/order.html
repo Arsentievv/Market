@@ -1,0 +1,27 @@
+{% extends 'app_market/base.html' %}
+
+{% block title %}
+    Delivery form
+{% endblock %}
+
+{% block content %}
+    <h1>Delivery form:</h1>
+    <h3>Express delivery: 500$ <br>
+        Delivery: 200$ if products cost less than 2000$ <br>
+        Delivery: free if products cost more than 2000$
+    </h3>
+    <h1>My cart:</h1>
+    {% for product in cart %}
+    <ul>
+        <li>Title: {{ product.item.title }}<br>
+            Price for one: {{ product.item.price }} $ <br>
+            Quantity: {{ product.quantity }}
+        </li>
+
+    </ul>
+    {% endfor %}
+    {{order.city}}
+    {{order.price}}
+    {{order.express_delivery}}
+
+{% endblock %}}

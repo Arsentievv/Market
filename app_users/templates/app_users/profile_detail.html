@@ -1,0 +1,20 @@
+{% extends 'app_market/base.html' %}
+
+{% block title %}
+    My account
+{% endblock %}
+
+{% block content %}
+    <h1>My account:</h1>
+    <ul>
+        <li>Avatar: <img src="{{ user_detail.profile.get_upload_url }}" height="300" >
+        <li>Username: {{ user_detail.username }}</li>
+        <li>First name: {{user_detail.profile.first_name }}</li>
+        <li>Surname: {{ user_detail.profile.surname }}</li>
+        <li>Last name: {{ user_detail.profile.last_name }}</li>
+        <li>Phone numb: {{ user_detail.profile.phone_numb }}</li>
+        <li>Email: {{ user_detail.profile.email }}</li>
+        <li><a href="{% url 'cart'%}">Cart</a></li>
+        <li><a href="{% url 'profile_update' pk=request.user.id %}">Update date</a></li>
+    </ul>
+{% endblock %}

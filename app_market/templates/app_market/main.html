@@ -1,0 +1,42 @@
+{% extends 'app_market/base.html' %}
+
+{% block title %}
+    Main paige
+{% endblock %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <h1>Wellcome, {{ request.user.username }}!</h1><br>
+        <h3>Site menu:</h3>
+        <ul>
+            <li><a href="{% url 'my_account' pk=request.user.id %}">My account</a></li>
+            <li><a href="{% url 'product_list' %}">Product catalog</a></li>
+            <li><a href="{% url 'category' %}">Categories</a></li>
+        </ul>
+    <h3>Limited edition products:</h3>
+    {% for item in limited_items %}
+        <ul>
+            <li>
+                <div class="product_card">
+                    <div class="product_title"><a href="{% url 'product_detail' pk=item.id%}">{{ item.title }}</a></div>
+                    <div class="product_img"><img src="{{ item.get_upload_url }}" height="300"></div>
+                    <div class="product_desc">{{ item.get_short_desc }}</div>
+                    <div class="product_price">{{ item.price }} USD</div>
+                    <div class="product_review_amt">{{ review_count }}</div>
+                    <div class="buy_form">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="product_button"><button type="submit">Buy</button></div>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    {% endfor %}
+    {% else %}
+        <h3>For web-site using you need to:</h3>
+        <a href="{% url 'registration' %}">Registrate</a> or
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'app_market/base.html' %}
+
+{% block title %}
+    {{ item_detail.title }} detail
+{% endblock %}
+
+{% block content %}
+    <h1>{{ item_detail.title }}</h1>
+    <ul>
+        <li>Title: {{ item_detail.title }}</li>
+        <li>Description: {{ item_detail.description }}</li>
+        <li>Price: {{ item_detail.price }}</li>
+        <li>Amount of sellings: {{ item_detail.sell_amt }}</li>
+        <li>Review amount: {{ review_count }}</li>
+        {% if item_detail.limited_edition %}
+            <li>Limited edition: Yes</li>
+        {% endif %}
+        <li>Image: <img src="{{ item_detail.get_upload_url }}" height="300"></li>
+        <li>
+            <form method="post">
+                {% csrf_token %}
+                {{ buy_form.as_p }}
+                <button type="submit">Buy</button>
+            </form>
+        </li>
+    </ul>
+    <h3>Reviews:</h3>
+    {% for rev in review_list %}
+        <ul>
+            <li>User: {{ rev.user.username }}</li>
+            <li>Text: {{ rev.text }}</li>
+        </ul>
+    {% endfor %}
+    {% if request.user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add</button>
+        </form>
+    {% else %}
+        <h3>You need to <a href="{% url 'login' %}">Login</a> to make review!</h3>
+    {% endif %}
+{% endblock %}

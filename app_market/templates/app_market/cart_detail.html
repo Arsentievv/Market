@@ -1,0 +1,21 @@
+{% extends 'app_market/base.html' %}
+
+{% block title %}
+    My cart
+{% endblock %}
+
+{% block content %}
+    <h1>My cart:</h1>
+    {% for product in cart %}
+    <ul>
+        <li>Title: {{ product.item.title }}<br>
+            Price for one: {{ product.item.price }} $ <br>
+            Quantity: {{ product.quantity }}
+        </li>
+
+    </ul>
+    {% endfor %}
+    <h3>Total price: {{ cart.get_total_price }}</h3>
+    <a href="{% url 'first_step' %}">Buy</a>
+    </form>
+{% endblock %}

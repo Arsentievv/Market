@@ -1,0 +1,27 @@
+{% extends 'app_market/base.html' %}
+
+{% block title %}
+  Products in {{ curr_category.title }}
+{% endblock %}
+
+{% block content %}
+  <h1>Products in {{ curr_category.title }}</h1>
+  {% for item in product_list %}
+    {{item}}
+    <div class="product_card">
+      <div class="product_title"><a href="{% url 'product_detail' pk=item.id%}">{{ item.title }}</a></div>
+      <div class="product_img"><img src="{{ item.get_upload_url }}" height="300"></div>
+      <div class="product_desc">{{ item.get_short_desc }}</div>
+      <div class="product_price">{{ item.price }} USD</div>
+      <div class="product_review_amt">{{ review_count }}</div>
+      <div class="buy_form">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="product_button"><button type="submit">Buy</button></div>
+        </form>
+      </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

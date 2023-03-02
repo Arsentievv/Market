@@ -1,0 +1,52 @@
+{% extends 'app_market/base.html' %}
+{% load static %}
+
+{% block title %}
+    Product catalog
+{% endblock %}
+
+{% block content %}
+    <h1>Product catalog:</h1>
+    {% if item_list %}
+    <form action="{% url 'product_list' %}" method="get" id="sortProduct">
+
+        <div class="box sort pull-right">
+            <span>Сортировка:</span>
+            <button value="Сортировка" class="dropdown-toggle" type="submit" data-toggle="dropdown" id="menu2">
+                <span class="dropdown-label">По умолчанию</span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
+                <li><input type="submit" name="orderby" value="-sell_amt"></li>
+                <li><input type="submit" name="orderby" value="sell_amt"></li>
+                <li><input type="submit" name="orderby" value="price"></li>
+                <li><input type="submit" name="orderby" value="-price"></li>
+                <li><input type="submit" name="orderby" value="-published_at"></li>
+                <li><input type="submit" name="orderby" value="published_at"></li>
+                <li><input type="submit" name="orderby" value="category"></li>
+<!--                Добавить переключение по кол-ву отзывов-->
+            </ul>
+      </div>
+    </form>
+    <h1>All products:</h1>
+        {% for item in item_list %}
+                    <div class="product_card">
+                        <div class="product_title"><a href="{% url 'product_detail' pk=item.id%}">{{ item.title }}</a></div>
+                        <div class="product_img"><img src="{{ item.get_upload_url }}" height="300"></div>
+                        <div class="product_desc">{{ item.get_short_desc }}</div>
+                        <div class="product_price">{{ item.price }} USD</div>
+                        <div class="product_review_amt">{{ review_count }}</div>
+                        <div class="buy_form">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <div class="product_button">
+                                    <input type="submit" value="Add to cart">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+        {% endfor %}
+    {% else %}
+        <h2>No products in catalog!</h2>
+    {% endif %}
+{% endblock %}
