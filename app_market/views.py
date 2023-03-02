@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic, View
 
 from app_market.cart import Cart
-from app_market.forms import ReviewForm, CartForm, UserParametrsForm, DeliveryForm
+from app_market.forms import ReviewForm, CartForm, UserParametrsForm, DeliveryForm, PayForm
 from app_market.models import Item, Review, Category, Order
 
 
@@ -111,10 +111,10 @@ class BuyView(generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context['user_form'] = UserParametrsForm
         context['delivery_form'] = DeliveryForm
+        context['pay_form'] = PayForm
         return context
 
 # Убрать item list добавить в историю заказов. Заказ убрать из моделей. Корзину вывести через get_context data
-
     def post(self, request):
         user_form = UserParametrsForm(request.POST)
         if user_form.is_valid():
@@ -135,14 +135,14 @@ class BuyView(generic.TemplateView):
                     price += 500
                 elif cart.get_total_price() < 2000:
                     price += 200
-                # item_list = [Item.objects.get(id=int(list(i.values())[2].id)) for i in cart.__iter__()]
                 order = Order.objects.create(
                     user=user, express_delivery=delivery, city=city, address=address, price=price
 
                 )
-                # order.item.add(item_list)
                 order.save()
-                return HttpResponseRedirect(f'/market/order/{order.id}/')
+                pay_form = PayForm(request.POST)
+                if pay_form.is_valid():
+                    return HttpResponseRedirect(f'/market/order/{order.id}/')
 
 
 class OrderView(generic.DetailView):

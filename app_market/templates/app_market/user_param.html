@@ -9,6 +9,7 @@
         {% csrf_token %}
         {{ user_form.as_p }}
         {{ delivery_form.as_p}}
+        {{ pay_form }}
         <button type="submit">Next</button>
     </form>
 

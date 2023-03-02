@@ -22,3 +22,11 @@ class DeliveryForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['city', 'address', 'express_delivery']
+
+
+class PayForm(forms.Form):
+    CHOICES = (
+        ('CARD', 'By card'),
+        ('ANY', 'Any card'),
+    )
+    choice = forms.ChoiceField(choices=CHOICES, required=False)

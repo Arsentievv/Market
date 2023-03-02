@@ -5,23 +5,32 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Delivery form:</h1>
-    <h3>Express delivery: 500$ <br>
-        Delivery: 200$ if products cost less than 2000$ <br>
-        Delivery: free if products cost more than 2000$
-    </h3>
-    <h1>My cart:</h1>
+    <h1>Confirmation of an order:</h1>
+    <h3>Your order:</h3>
     {% for product in cart %}
     <ul>
-        <li>Title: {{ product.item.title }}<br>
-            Price for one: {{ product.item.price }} $ <br>
-            Quantity: {{ product.quantity }}
+        <li>
+              <div class="product_card">
+                    <div class="product_title"><a href="{% url 'product_detail' pk=product.item.id%}">{{ product.item.title }}</a></div>
+                    <div class="product_img"><img src="{{ product.item.get_upload_url }}" height="300"></div>
+                    <div class="product_desc">{{ product.item.get_short_desc }}</div>
+                    <div class="product_price">{{ product.item.price }} USD</div>
+              </div>
         </li>
 
     </ul>
     {% endfor %}
-    {{order.city}}
-    {{order.price}}
-    {{order.express_delivery}}
-
+    <h3>Delivery:</h3>
+    <h4>
+        City: {{ order.city }}<br>
+        Address: {{ order.address }}<br>
+        Total price: {{ order.price }} $<br>
+        Phone numb: {{ order.user.profile.phone_numb }}<br>
+        Email: {{ order.user.profile.email }}<br>
+        {% if order.express_delivery %}
+            Express delivery: Yes <br>
+        {% else %}
+            Express delivery: No <br>
+        {% endif %}
+    </h4>
 {% endblock %}}
