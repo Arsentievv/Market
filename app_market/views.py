@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from django.views import generic, View
 
 from app_market.cart import Cart
-from app_market.forms import ReviewForm, CartForm, UserParametrsForm, DeliveryForm, PayForm
-from app_market.models import Item, Review, Category, Order
+from app_market.forms import ReviewForm, CartForm, UserParametrsForm, DeliveryForm, PayForm, AddFaveCategory
+from app_market.models import Item, Review, Category, Order, FavouriteCategory
 
 
 class MainPageView(generic.TemplateView):
@@ -15,6 +15,7 @@ class MainPageView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['limited_items'] = Item.objects.filter(limited_edition=True)[0:16]
+        context['fave_category'] = FavouriteCategory.objects.filter(user_id=self.request.user.id).all()[:5]
         return context
 
 
@@ -57,6 +58,7 @@ class ProductDetailView(generic.DetailView):
         context['review_list'] = Review.objects.filter(item_id=self.object.id).all()
         context['review_count'] = Review.objects.filter(item_id=self.object.id).all().count()
         context['buy_form'] = CartForm()
+        context['add_category_form'] = AddFaveCategory()
         return context
 
     def post(self, request, **kwargs):
@@ -69,6 +71,13 @@ class ProductDetailView(generic.DetailView):
             review.text = form.cleaned_data.get('text')
             review.save()
             return HttpResponseRedirect(f'/market/product_list/{item_detail.id}/')
+        add_category_form = AddFaveCategory(request.POST)
+        if add_category_form.is_valid():
+            if item_detail.category in FavouriteCategory.objects.filter(user_id=self.request.user.id).all():
+                pass
+            else:
+                instance = FavouriteCategory.objects.create(user=request.user, category=item_detail.category)
+                instance.save()
         cart = Cart(request)
         item = get_object_or_404(Item, id=kwargs.get('pk'))
         cart_form = CartForm(request.POST)
@@ -102,7 +111,6 @@ class CategoryListView(generic.ListView):
     model = Category
     template_name = 'app_market/category_list.html'
     context_object_name = 'category_list'
-
 
 class BuyView(generic.TemplateView):
     template_name = 'app_market/user_param.html'
@@ -154,6 +162,9 @@ class OrderView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['cart'] = Cart(self.request)
         return context
+
+
+
 
 
 

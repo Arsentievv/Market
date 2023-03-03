@@ -9,6 +9,14 @@
     <ul>
         <li>Title: {{ item_detail.title }}</li>
         <li>Description: {{ item_detail.description }}</li>
+        <li>Category: {{ item_detail.category.title }}
+            <form method="post">
+                {% csrf_token %}
+                {{ add_category_form.as_p }}
+                <button type="submit">Add category to favourite</button>
+            </form>
+        </li>
+        <br>
         <li>Price: {{ item_detail.price }}</li>
         <li>Amount of sellings: {{ item_detail.sell_amt }}</li>
         <li>Review amount: {{ review_count }}</li>

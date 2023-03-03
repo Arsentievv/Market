@@ -13,6 +13,17 @@
             <li><a href="{% url 'product_list' %}">Product catalog</a></li>
             <li><a href="{% url 'category' %}">Categories</a></li>
         </ul>
+    <h3>Favourite categories:</h3>
+    {% if fave_category %}
+        {% for category in fave_category %}
+            <ul>
+                <li><a href="">{{ category.category.title }}</a></li>
+            </ul>
+        {% endfor %}
+    {% else %}
+        <h4>No favourite categories yet</h4>
+    {% endif %}
+
     <h3>Limited edition products:</h3>
     {% for item in limited_items %}
         <ul>

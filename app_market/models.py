@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-class Category(models.Model):
-    title = models.CharField(max_length=30, verbose_name='Product category', default='other')
+
 
 class Item(models.Model):
     title = models.CharField(max_length=30, verbose_name='Item title')
@@ -13,7 +12,7 @@ class Item(models.Model):
     in_stock = models.PositiveIntegerField(default=1, verbose_name='Item in stock')
     img = models.ImageField(null=True, verbose_name='Item Image', upload_to='files/items/')
     published_at = models.DateTimeField(auto_now_add=True, verbose_name='Day of publishing')
-    category = models.ManyToManyField(Category, default=None, null=True)
+    category = models.ForeignKey('Category', null=True, default=None, on_delete=models.CASCADE)
 
     def get_upload_url(self):
         return self.img.url
@@ -21,6 +20,12 @@ class Item(models.Model):
     def get_short_desc(self):
         return self.description[:20]
 
+class Category(models.Model):
+    title = models.CharField(max_length=30, verbose_name='Product category', default='other')
+
+class FavouriteCategory(models.Model):
+    category = models.ForeignKey(Category, null=True, default=None, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, default=None, on_delete=models.CASCADE)
 
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

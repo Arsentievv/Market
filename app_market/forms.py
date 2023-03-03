@@ -30,3 +30,7 @@ class PayForm(forms.Form):
         ('ANY', 'Any card'),
     )
     choice = forms.ChoiceField(choices=CHOICES, required=False)
+
+class AddFaveCategory(forms.Form):
+    # field = forms.CharField(max_length=30, widget=forms.HiddenInput)
+    pass

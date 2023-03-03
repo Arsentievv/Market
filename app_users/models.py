@@ -13,9 +13,9 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='files/avatars/', verbose_name='Avatar')
     email = models.EmailField(verbose_name='Email', unique=True)
     reg_date = models.DateTimeField(auto_now_add=True, verbose_name='Registration date')
-    fave_category = models.ManyToManyField(Category, default=None, null=True)
 
     def get_upload_url(self):
         return self.avatar.url
+
 
 
