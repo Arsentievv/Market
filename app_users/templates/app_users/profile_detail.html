@@ -17,4 +17,15 @@
         <li><a href="{% url 'cart'%}">Cart</a></li>
         <li><a href="{% url 'profile_update' pk=request.user.id %}">Update date</a></li>
     </ul>
+    <h1>History:</h1>
+    {% for item in history %}
+        <ul>
+            <li>
+                Item title: {{ item.item.title }}<br>
+                Date of buy: {{ item.date }}<br>
+                Quantity: {{ item.quantity }}<br><br>
+                {{ item.history }}
+            </li>
+        </ul>
+    {% endfor %}
 {% endblock %}

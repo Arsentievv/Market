@@ -12,6 +12,7 @@
             <li><a href="{% url 'my_account' pk=request.user.id %}">My account</a></li>
             <li><a href="{% url 'product_list' %}">Product catalog</a></li>
             <li><a href="{% url 'category' %}">Categories</a></li>
+            <li><a href="{% url 'best_sellers' %}">Best sellers</a></li>
         </ul>
     <h3>Favourite categories:</h3>
     {% if fave_category %}

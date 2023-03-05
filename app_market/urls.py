@@ -7,6 +7,8 @@ from .views import (
     CategoryListView,
     BuyView,
     OrderView,
+    CategoryDetailView,
+    BestSellersListView
 )
 
 urlpatterns = [
@@ -17,6 +19,9 @@ urlpatterns = [
     path('category/', CategoryListView.as_view(), name='category'),
     path('first_step/', BuyView.as_view(), name='first_step'),
     path('order/<int:pk>/', OrderView.as_view(), name='order'),
+    path('category/<int:pk>/', CategoryDetailView.as_view(), name='category_detail'),
+    path('best_sellers/', BestSellersListView.as_view(), name='best_sellers')
+
 
 
 

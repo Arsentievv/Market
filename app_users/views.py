@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
+from app_market.models import History
 from app_users.forms import RegistrationForm
 from app_users.models import Profile
 
@@ -46,10 +47,15 @@ class Logout(LogoutView):
 
 
 class MyAcoountView(generic.DetailView):
+
     model = User
     template_name = 'app_users/profile_detail.html'
     context_object_name = 'user_detail'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['history'] = History.objects.select_related().filter(user=self.request.user)
+        return context
 
 
 class ProfileUpdateView(generic.UpdateView):

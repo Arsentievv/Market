@@ -23,6 +23,7 @@ class Item(models.Model):
 class Category(models.Model):
     title = models.CharField(max_length=30, verbose_name='Product category', default='other')
 
+
 class FavouriteCategory(models.Model):
     category = models.ForeignKey(Category, null=True, default=None, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, default=None, on_delete=models.CASCADE)

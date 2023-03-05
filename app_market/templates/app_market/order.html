@@ -17,7 +17,6 @@
                     <div class="product_price">{{ product.item.price }} USD</div>
               </div>
         </li>
-
     </ul>
     {% endfor %}
     <h3>Delivery:</h3>
@@ -33,4 +32,9 @@
             Express delivery: No <br>
         {% endif %}
     </h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Buy</button>
+    </form>
 {% endblock %}}

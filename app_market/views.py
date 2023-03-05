@@ -6,10 +6,11 @@ from django.views import generic, View
 
 from app_market.cart import Cart
 from app_market.forms import ReviewForm, CartForm, UserParametrsForm, DeliveryForm, PayForm, AddFaveCategory
-from app_market.models import Item, Review, Category, Order, FavouriteCategory
+from app_market.models import Item, Review, Category, Order, FavouriteCategory, History
 
 
 class MainPageView(generic.TemplateView):
+
     template_name = 'app_market/main.html'
 
     def get_context_data(self, **kwargs):
@@ -20,6 +21,7 @@ class MainPageView(generic.TemplateView):
 
 
 class ProductListView(generic.ListView):
+
     model = Item
     template_name = 'app_market/item_list.html'
     context_object_name = 'item_list'
@@ -35,6 +37,19 @@ class ProductListView(generic.ListView):
         context['form'] = CartForm
         return context
 
+class BestSellersListView(generic.ListView):
+    model = Item
+    template_name = 'app_market/best.html'
+    context_object_name = 'item_list'
+    paginate_by = 15
+    queryset = Item.objects.all().order_by('-sell_amt')[0:1]
+
+    def get_ordering(self):
+        ordering = self.request.GET.get('orderby')
+        return ordering
+
+
+
     def post(self, request, **kwargs):
         cart = Cart(request)
         item = Item.ojects.get(id=kwargs.get('pk'))
@@ -48,6 +63,7 @@ class ProductListView(generic.ListView):
 
 
 class ProductDetailView(generic.DetailView):
+
     model = Item
     template_name = 'app_market/item_detail.html'
     context_object_name = 'item_detail'
@@ -97,6 +113,7 @@ class CartView(View):
 
 
 class SearchResultView(generic.ListView):
+
     model = Item
     template_name = 'app_market/search_result.html'
 
@@ -108,11 +125,24 @@ class SearchResultView(generic.ListView):
         return object_list
 
 class CategoryListView(generic.ListView):
+
     model = Category
     template_name = 'app_market/category_list.html'
     context_object_name = 'category_list'
 
+class CategoryDetailView(generic.DetailView):
+
+    model = Category
+    template_name = 'app_market/category_detail.html'
+    context_object_name = 'category'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['item_list'] = Item.objects.filter(category_id=self.object.id).all()
+        return context
+
 class BuyView(generic.TemplateView):
+
     template_name = 'app_market/user_param.html'
 
     def get_context_data(self, **kwargs):
@@ -122,7 +152,6 @@ class BuyView(generic.TemplateView):
         context['pay_form'] = PayForm
         return context
 
-# Убрать item list добавить в историю заказов. Заказ убрать из моделей. Корзину вывести через get_context data
     def post(self, request):
         user_form = UserParametrsForm(request.POST)
         if user_form.is_valid():
@@ -161,7 +190,25 @@ class OrderView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cart'] = Cart(self.request)
+        context['form'] = AddFaveCategory
         return context
+
+    def post(self, request, **kwargs):
+        form = AddFaveCategory(request.POST)
+        cart = Cart(request)
+        if form.is_valid():
+            for item in cart.__iter__():
+                instance = Item.objects.get(id=int(list(item.values())[2].id))
+                quantity = item['quantity']
+                instance.in_stock -= item['quantity']
+                instance.sell_amt += item['quantity']
+                History.objects.create(user=request.user, item=instance, quantity=quantity)
+                instance.save()
+            cart.clear()
+            return redirect('/market/main/')
+
+
+
 
 
 

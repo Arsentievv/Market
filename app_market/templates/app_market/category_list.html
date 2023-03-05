@@ -9,11 +9,7 @@
   <h1>Category list:</h1>
   {% for category in category_list %}
     <ul>
-      <li><a href="#">{{ category.title }}</a>
-        <div class="add_to_fave">
-          <input type="checkbox" value="" >
-        </div>
-      </li>
+      <li><a href="{% url 'category_detail' pk=category.id %}">{{ category.title }}</a>
     </ul>
   {% endfor %}
 {% endblock %}
