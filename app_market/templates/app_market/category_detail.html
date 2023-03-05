@@ -6,8 +6,7 @@
 
 {% block content %}
     <h1>Category: {{ category.title }}.</h1>
-        {% if item in item_list %}
-            {% for item in item_list %}
+        {% for item in item_list %}
                     <div class="product_card">
                         <div class="product_title"><a href="{% url 'product_detail' pk=item.id%}">{{ item.title }}</a></div>
                         <div class="product_img"><img src="{{ item.get_upload_url }}" height="300"></div>
@@ -24,8 +23,6 @@
                             </form>
                         </div>
                     </div>
-            {% endfor %}
-        {% else %}
-            <h2>No products in catalog!</h2>
-        {% endif %}
+    {% endfor %}
+
 {% endblock %}

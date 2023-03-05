@@ -42,12 +42,11 @@ class BestSellersListView(generic.ListView):
     template_name = 'app_market/best.html'
     context_object_name = 'item_list'
     paginate_by = 15
-    queryset = Item.objects.all().order_by('-sell_amt')[0:1]
+    queryset = Item.objects.all().order_by('-sell_amt')[0:5]
 
     def get_ordering(self):
         ordering = self.request.GET.get('orderby')
         return ordering
-
 
 
     def post(self, request, **kwargs):

@@ -18,7 +18,7 @@
     {% if fave_category %}
         {% for category in fave_category %}
             <ul>
-                <li><a href="">{{ category.category.title }}</a></li>
+                <li><a href="{% url 'category_detail' pk=category.id %}">{{ category.category.title }}</a></li>
             </ul>
         {% endfor %}
     {% else %}

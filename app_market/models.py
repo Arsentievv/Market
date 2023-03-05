@@ -14,6 +14,7 @@ class Item(models.Model):
     published_at = models.DateTimeField(auto_now_add=True, verbose_name='Day of publishing')
     category = models.ForeignKey('Category', null=True, default=None, on_delete=models.CASCADE)
 
+
     def get_upload_url(self):
         return self.img.url
 
@@ -22,7 +23,6 @@ class Item(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=30, verbose_name='Product category', default='other')
-
 
 class FavouriteCategory(models.Model):
     category = models.ForeignKey(Category, null=True, default=None, on_delete=models.CASCADE)
