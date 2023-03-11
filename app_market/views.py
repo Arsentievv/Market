@@ -145,14 +145,29 @@ class BuyView(generic.TemplateView):
     template_name = 'app_market/user_param.html'
 
     def get_context_data(self, **kwargs):
+        initial_dict = {
+            'first_name': self.request.user.profile.first_name,
+            'surname': self.request.user.profile.surname,
+            'last_name': self.request.user.profile.last_name,
+            'phone_numb': self.request.user.profile.phone_numb,
+            'email': self.request.user.profile.email
+        }
+
         context = super().get_context_data(**kwargs)
-        context['user_form'] = UserParametrsForm
+        context['user_form'] = UserParametrsForm(initial=initial_dict)
         context['delivery_form'] = DeliveryForm
         context['pay_form'] = PayForm
         return context
 
     def post(self, request):
-        user_form = UserParametrsForm(request.POST)
+        initial_dict = {
+            'first_name': 'request.user.profile.first_name',
+            'surname': request.user.profile.surname,
+            'last_name': request.user.profile.last_name,
+            'phone_numb': request.user.profile.phone_numb,
+            'email': request.user.profile.email
+        }
+        user_form = UserParametrsForm(request.POST, initial=initial_dict)
         if user_form.is_valid():
             delivery_form = DeliveryForm(request.POST)
             if delivery_form.is_valid():
@@ -179,7 +194,18 @@ class BuyView(generic.TemplateView):
                 pay_form = PayForm(request.POST)
                 if pay_form.is_valid():
                     return HttpResponseRedirect(f'/market/order/{order.id}/')
-
+                else:
+                    return render(request, 'app_market/user_param.html', context={
+                        'user_form': UserParametrsForm(initial=initial_dict), 'delivery_form': DeliveryForm,
+                        'pay_form': PayForm})
+            else:
+                return render(request, 'app_market/user_param.html', context={
+                    'user_form': UserParametrsForm(initial=initial_dict), 'delivery_form': DeliveryForm,
+                    'pay_form': PayForm})
+        else:
+            return render(request, 'app_market/user_param.html', context={
+                'user_form': UserParametrsForm(initial=initial_dict), 'delivery_form': DeliveryForm,
+                'pay_form': PayForm})
 
 class OrderView(generic.DetailView):
     model = Order
