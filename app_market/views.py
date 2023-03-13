@@ -1,3 +1,5 @@
+
+
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
@@ -33,11 +35,25 @@ class ProductListView(generic.ListView):
         return ordering
 
     def get_context_data(self, **kwargs):
+        # Доделать ссылку на отзывы
         context = super().get_context_data(**kwargs)
         context['form'] = CartForm
         return context
 
+    def post(self, request, **kwargs):
+        form = CartForm(request.POST)
+        item = Item.objects.get(id=request.POST.get('item_id'))
+        cart = Cart(request)
+        if form.is_valid():
+            cd = form.cleaned_data
+            cart.add(item=item,
+                     quantity=cd['quantity'],
+                     update_quantity=cd['update'])
+        return redirect('/market/cart/')
+
+
 class BestSellersListView(generic.ListView):
+
     model = Item
     template_name = 'app_market/best.html'
     context_object_name = 'item_list'
@@ -48,10 +64,9 @@ class BestSellersListView(generic.ListView):
         ordering = self.request.GET.get('orderby')
         return ordering
 
-
     def post(self, request, **kwargs):
         cart = Cart(request)
-        item = Item.ojects.get(id=kwargs.get('pk'))
+        item = Item.objects.get(id=request.POST['item_id'])
         form = CartForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data

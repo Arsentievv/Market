@@ -31,7 +31,7 @@ class FavouriteCategory(models.Model):
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField(max_length=500, verbose_name='Text')
-    item = models.ForeignKey(Item, default=None, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, default=None, on_delete=models.CASCADE, related_name='reviews')
 
 
 class Cart(models.Model):
@@ -39,6 +39,8 @@ class Cart(models.Model):
     item = models.ForeignKey('Item', on_delete=models.CASCADE, unique=False)
     quantity = models.IntegerField(default=1)
     date_added = models.DateTimeField(auto_now_add=True)
+
+
 
     class Meta:
         ordering = ['date_added']

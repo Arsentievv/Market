@@ -1,6 +1,6 @@
 from django import forms
 
-from app_market.models import Review, Order
+from app_market.models import Review, Order,  Item, Cart
 from app_users.models import Profile
 
 
@@ -9,9 +9,19 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['text']
 
-class CartForm(forms.Form):
-    quantity = forms.IntegerField()
+class CartForm(forms.ModelForm):
+
     update = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput)
+    item_id = forms.IntegerField()
+
+    class Meta:
+        model = Cart
+        fields = ('quantity', )
+    #
+    # quantity = forms.IntegerField()
+    # update = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput)
+    # item_id = forms.CharField(widget=forms.HiddenInput)
+
 
 class UserParametrsForm(forms.ModelForm):
     class Meta:
