@@ -49,7 +49,8 @@ class ProductListView(generic.ListView):
             cart.add(item=item,
                      quantity=cd['quantity'],
                      update_quantity=cd['update'])
-        return redirect('/market/cart/')
+            return HttpResponseRedirect('/market/product_list/')
+        return redirect('/market/product_list/')
 
 
 class BestSellersListView(generic.ListView):
@@ -65,15 +66,16 @@ class BestSellersListView(generic.ListView):
         return ordering
 
     def post(self, request, **kwargs):
-        cart = Cart(request)
-        item = Item.objects.get(id=request.POST['item_id'])
         form = CartForm(request.POST)
+        item = Item.objects.get(id=request.POST.get('item_id'))
+        cart = Cart(request)
         if form.is_valid():
             cd = form.cleaned_data
             cart.add(item=item,
                      quantity=cd['quantity'],
                      update_quantity=cd['update'])
-        return redirect('/market/cart/')
+            return HttpResponseRedirect('/market/best_sellers/')
+        return redirect('/market/best_sellers/')
 
 
 class ProductDetailView(generic.DetailView):

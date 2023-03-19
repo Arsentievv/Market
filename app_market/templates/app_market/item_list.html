@@ -37,14 +37,14 @@
                         <div class="product_price">{{ item.price }} USD</div>
                         <div class="product_review_amt"><h3>
                             <a href="/market/product_list/{{item.id}}/#reviews">
-                            Review's count: {{ item.reviews.count }}</a></h3></div>
+                            Review's cou:nt {{ item.reviews.count }}</a></h3>
+                        </div>
                         <div class="buy_form">
-                            <form method="post">
+                            <form method="post" action="">
                                 {% csrf_token %}
-                                {{ form.as_p }}
-                                <div class="product_button">
-                                    <input type="submit" value="Add to cart">
-                                </div>
+                                <input type="hidden" name="item_id" value="{{ item.id }}" />
+                                <input type="number" name="quantity" value=0 />
+                                <input type="submit" value="Добавить в корзину" />
                             </form>
                         </div>
                     </div>

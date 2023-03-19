@@ -12,7 +12,7 @@ class ReviewForm(forms.ModelForm):
 class CartForm(forms.ModelForm):
 
     update = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput)
-    item_id = forms.IntegerField()
+    item_id = forms.IntegerField(widget=forms.HiddenInput)
 
     class Meta:
         model = Cart
