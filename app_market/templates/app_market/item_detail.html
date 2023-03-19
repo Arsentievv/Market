@@ -32,13 +32,17 @@
             </form>
         </li>
     </ul>
-    <h3>Reviews:</h3>
-    {% for rev in review_list %}
+    <p><a name="reviews"></a></p>
+    <div class="reviews">
+        <a id="reviews"></a>
+        <h3>Reviews:</h3>
+        {% for rev in review_list %}
         <ul>
             <li>User: {{ rev.user.username }}</li>
             <li>Text: {{ rev.text }}</li>
         </ul>
-    {% endfor %}
+        {% endfor %}
+    </div>
     {% if request.user.is_authenticated %}
         <form method="post">
             {% csrf_token %}
